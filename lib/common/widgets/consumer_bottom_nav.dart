@@ -1,6 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 
-// Placeholder Bottom Navigation untuk ConsumerBottomNav
+// Bottom Navigation untuk Consumer
 // Items: Beranda, Katalog, Pesanan, Profil
 class ConsumerBottomNav extends StatelessWidget {
   final int currentIndex;
@@ -18,9 +18,25 @@ class ConsumerBottomNav extends StatelessWidget {
       currentIndex: currentIndex,
       onTap: onTap,
       type: BottomNavigationBarType.fixed,
+      selectedItemColor: Theme.of(context).primaryColor,
+      unselectedItemColor: Colors.grey,
       items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Item 1'),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Item 2'),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Beranda',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.store),
+          label: 'Katalog',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.receipt_long),
+          label: 'Pesanan',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profil',
+        ),
       ],
     );
   }
