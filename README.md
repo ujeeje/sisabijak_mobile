@@ -119,10 +119,16 @@ SisaBijak adalah platform e-commerce food rescue berbasis Django yang dirancang 
     * `total_orders_completed` : Jumlah total pesanan yang sudah berhasil diselesaikan konsumen
     * `total_money_saved` : Total akumulasi uang yang dihemat (selisih harga asli dan diskon)
     * `total_co2_prevented` : Total akumulasi gas emisi karbon yang berhasil dicegah dari makanan sisa
-* **Views / Endpoints (Backend Django REST / JSON)**:
-  * `consumer_dashboard_view()` / `get_consumer_profile_json()` : Endpoint data profil beserta statistik uang dihemat (*money saved*) dan emisi karbon dicegah (*CO₂ prevented*) (*Auth: Consumer*)
-  * `edit_profile_view()` : Endpoint untuk memperbarui nomor telepon atau kata sandi akun (*Auth: Consumer*)
-  * `order_history_view()` : Endpoint riwayat seluruh pesanan konsumen (*pending*, *paid/siap klaim*, dan *completed*) (*Auth: Consumer*)
+* **Endpoints (Django REST Framework)**:
+
+  - **GET /profile/ :** Mengambil informasi profil konsumen beserta ringkasan statistik aktivitas, meliputi jumlah pesanan selesai, total uang yang dihemat, dan estimasi emisi karbon yang berhasil dicegah (Auth: Consumer)
+
+  - **POST /consumer/edit-profile/ :** Memproses perubahan informasi akun konsumen, termasuk pembaruan nomor telepon dan password (Auth: Consumer)
+
+  - **GET /consumer/orders/ :** Mengambil riwayat transaksi milik konsumen yang sedang login, mencakup pesanan dengan status pending, paid/siap klaim, dan completed (Auth: Consumer)
+
+* **Alur Integrasi Data:** Modul Consumer Profile menghubungkan aplikasi Flutter dengan backend Django REST Framework untuk mengakses dan mengelola informasi konsumen. Saat konsumen membuka halaman dashboard atau riwayat pesanan, Flutter mengirimkan permintaan GET ke endpoint terkait untuk memperoleh data profil dan transaksi. Backend memproses permintaan tersebut dan mengirimkan respons dalam format JSON agar dapat ditampilkan pada antarmuka aplikasi. Sementara itu, ketika konsumen melakukan perubahan informasi akun melalui halaman Edit Profile, Flutter mengirimkan data menggunakan POST Request ke backend. Django kemudian memvalidasi data dan menyimpan perubahan ke database apabila permintaan berhasil.
+
 
 ---
 
