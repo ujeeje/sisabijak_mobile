@@ -44,12 +44,13 @@ SisaBijak adalah platform e-commerce food rescue berbasis Django yang dirancang 
     * `created_at` : Waktu sistem saat ulasan pertama kali dibuat
     * `updated_at` : Waktu sistem saat ulasan terakhir kali diubah
 * **Views / Endpoints (Backend Django REST / JSON)**:
-  * `catalog_list_view()` / `get_catalog_json()` : Endpoint API untuk pencarian nama produk, filter harga diskon, dan daftar produk *Available* (*Auth: Guest, Consumer, Merchant, Admin*)
-  * `catalog_detail_view()` / `get_product_detail_json()` : Menampilkan rincian detail produk tunggal (*Auth: Guest, Consumer, Merchant, Admin*)
-  * `get_reviews_json()` : Endpoint API untuk memuat daftar ulasan dan rata-rata rating suatu produk (*Auth: Guest, Consumer, Merchant, Admin*)
-  * `review_create_view()` : Membuat ulasan baru khusus untuk pesanan yang sudah selesai (*Auth: Consumer*)
-  * `review_update_view()` : Mengubah isi ulasan yang sudah dibuat (*Auth: Consumer*)
-  * `review_delete_view()` : Menghapus ulasan dari sistem (*Auth: Consumer*)
+* **Endpoints (Django REST Framework)**:
+  * `GET /api/v1/catalog/products/` : daftar produk tersedia, bisa pencarian `?q=` dan filter harga `?harga=` (*Auth: Guest, Consumer, Merchant, Admin*)
+  * `GET /api/v1/catalog/products/<product_id>/` : detail produk, rata-rata rating, dan info boleh menulis ulasan (*Auth: Guest, Consumer, Merchant, Admin*)
+  * `GET /api/v1/catalog/products/<product_id>/reviews/` : daftar ulasan suatu produk (*Auth: Guest, Consumer, Merchant, Admin*)
+  * `POST /api/v1/catalog/products/<product_id>/reviews/` : menulis ulasan untuk pesanan yang sudah selesai (*Auth: Consumer*)
+  * `PATCH/DELETE /api/v1/catalog/reviews/<review_id>/` : mengubah atau menghapus ulasan milik sendiri (*Auth: Consumer*)
+* **Alur Integrasi Data**: halaman Katalog di Flutter memanggil endpoint DRF di atas secara asinkron, Django mengambil data `MerchantProduct` dan `Review` dari database lalu mengubahnya jadi JSON lewat serializer, kemudian Flutter mengubah JSON tersebut menjadi model `Product` dan `Review` untuk ditampilkan.
 
 ---
 
