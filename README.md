@@ -74,6 +74,7 @@ SisaBijak adalah platform e-commerce food rescue berbasis Django yang dirancang 
   * `product_create()` : Endpoint untuk menambah produk makanan surplus baru (*Auth: Merchant*)
   * `product_update()` : Endpoint untuk mengubah informasi, stok, harga, atau jam pickup produk (*Auth: Merchant*)
   * `product_delete()` : Endpoint untuk menghapus atau menonaktifkan produk merchant (*Auth: Merchant*)
+* **Alur Integrasi Data**: Modul Merchant Product menghubungkan aplikasi Flutter dengan backend Django REST Framework untuk mengelola inventaris makanan surplus secara real-time. Saat merchant membuka halaman Produk Saya, Flutter mengirimkan permintaan GET secara asinkron ke endpoint Django untuk memuat data dari model `MerchantProduct`, yang kemudian diserialisasi menjadi format JSON dan diparsing menjadi objek produk untuk dirender ke dalam antarmuka kartu produk. Sementara itu, saat merchant menambahkan produk surplus baru, mengubah informasi (seperti stok, harga, diskon, atau jam pickup), maupun menghapus produk, Flutter mengirimkan permintaan HTTP POST berisi data formulir ke endpoint backend untuk divalidasi dan disimpan ke database sebelum mengembalikan status respons konfirmasi ke aplikasi mobile.
 
 ---
 
