@@ -43,13 +43,13 @@ SisaBijak adalah platform e-commerce food rescue berbasis Django yang dirancang 
     * `comment` : Isi teks ulasan yang ditulis oleh konsumen
     * `created_at` : Waktu sistem saat ulasan pertama kali dibuat
     * `updated_at` : Waktu sistem saat ulasan terakhir kali diubah
-* **Endpoints (Django REST Framework)**:
-  * `GET /api/v1/catalog/products/` : daftar produk tersedia, bisa pencarian `?q=` dan filter harga `?harga=` (*Auth: Guest, Consumer, Merchant, Admin*)
-  * `GET /api/v1/catalog/products/<product_id>/` : detail produk, rata-rata rating, dan info boleh menulis ulasan (*Auth: Guest, Consumer, Merchant, Admin*)
-  * `GET /api/v1/catalog/products/<product_id>/reviews/` : daftar ulasan suatu produk (*Auth: Guest, Consumer, Merchant, Admin*)
-  * `POST /api/v1/catalog/products/<product_id>/reviews/` : menulis ulasan untuk pesanan yang sudah selesai (*Auth: Consumer*)
-  * `PATCH/DELETE /api/v1/catalog/reviews/<review_id>/` : mengubah atau menghapus ulasan milik sendiri (*Auth: Consumer*)
-* **Alur Integrasi Data**: halaman Katalog di Flutter memanggil endpoint DRF di atas secara asinkron, Django mengambil data `MerchantProduct` dan `Review` dari database lalu mengubahnya jadi JSON lewat serializer, kemudian Flutter mengubah JSON tersebut menjadi model `Product` dan `Review` untuk ditampilkan.
+* **Views / Endpoints (Backend Django REST / JSON)**:
+  * `catalog_list_view()` / `get_catalog_json()` : Endpoint API untuk pencarian nama produk, filter harga diskon, dan daftar produk *Available* (*Auth: Guest, Consumer, Merchant, Admin*)
+  * `catalog_detail_view()` / `get_product_detail_json()` : Menampilkan rincian detail produk tunggal (*Auth: Guest, Consumer, Merchant, Admin*)
+  * `get_reviews_json()` : Endpoint API untuk memuat daftar ulasan dan rata-rata rating suatu produk (*Auth: Guest, Consumer, Merchant, Admin*)
+  * `review_create_view()` : Membuat ulasan baru khusus untuk pesanan yang sudah selesai (*Auth: Consumer*)
+  * `review_update_view()` : Mengubah isi ulasan yang sudah dibuat (*Auth: Consumer*)
+  * `review_delete_view()` : Menghapus ulasan dari sistem (*Auth: Consumer*)
 
 ---
 
@@ -119,16 +119,10 @@ SisaBijak adalah platform e-commerce food rescue berbasis Django yang dirancang 
     * `total_orders_completed` : Jumlah total pesanan yang sudah berhasil diselesaikan konsumen
     * `total_money_saved` : Total akumulasi uang yang dihemat (selisih harga asli dan diskon)
     * `total_co2_prevented` : Total akumulasi gas emisi karbon yang berhasil dicegah dari makanan sisa
-* **Endpoints (Django REST Framework)**:
-
-  - **GET /profile/ :** Mengambil informasi profil konsumen beserta ringkasan statistik aktivitas, meliputi jumlah pesanan selesai, total uang yang dihemat, dan estimasi emisi karbon yang berhasil dicegah (Auth: Consumer)
-
-  - **POST /consumer/edit-profile/ :** Memproses perubahan informasi akun konsumen, termasuk pembaruan nomor telepon dan password (Auth: Consumer)
-
-  - **GET /consumer/orders/ :** Mengambil riwayat transaksi milik konsumen yang sedang login, mencakup pesanan dengan status pending, paid/siap klaim, dan completed (Auth: Consumer)
-
-* **Alur Integrasi Data:** Modul Consumer Profile menghubungkan aplikasi Flutter dengan backend Django REST Framework untuk mengakses dan mengelola informasi konsumen. Saat konsumen membuka halaman dashboard atau riwayat pesanan, Flutter mengirimkan permintaan GET ke endpoint terkait untuk memperoleh data profil dan transaksi. Backend memproses permintaan tersebut dan mengirimkan respons dalam format JSON agar dapat ditampilkan pada antarmuka aplikasi. Sementara itu, ketika konsumen melakukan perubahan informasi akun melalui halaman Edit Profile, Flutter mengirimkan data menggunakan POST Request ke backend. Django kemudian memvalidasi data dan menyimpan perubahan ke database apabila permintaan berhasil.
-
+* **Views / Endpoints (Backend Django REST / JSON)**:
+  * `consumer_dashboard_view()` / `get_consumer_profile_json()` : Endpoint data profil beserta statistik uang dihemat (*money saved*) dan emisi karbon dicegah (*CO₂ prevented*) (*Auth: Consumer*)
+  * `edit_profile_view()` : Endpoint untuk memperbarui nomor telepon atau kata sandi akun (*Auth: Consumer*)
+  * `order_history_view()` : Endpoint riwayat seluruh pesanan konsumen (*pending*, *paid/siap klaim*, dan *completed*) (*Auth: Consumer*)
 
 ---
 
@@ -178,8 +172,10 @@ SisaBijak adalah platform e-commerce food rescue berbasis Django yang dirancang 
     * `MerchantProduct` : Mengambil produk berstatus *Available* dengan potongan harga tertinggi untuk ditampilkan pada section *daily deals*.
     * `MerchantLocationIntegrator` : Mengambil data koordinat dan alamat toko mitra untuk ditampilkan pada peta interaktif.
 * **Views / Endpoints (Backend Django REST / JSON)**:
-  * `show_main()` / `get_landing_data_json()` : Endpoint untuk menyajikan data halaman utama, deals surplus harian, ringkasan statistik dampak lingkungan platform, dan informasi merchant terdekat (*Auth: Guest, Consumer, Merchant, Admin*)
-
+  * **Endpoints (Django REST Framework)**:
+  * `GET /api/v1/landing/` : mengambil data utama halaman beranda meliputi penawaran makanan surplus harian dengan diskon tertinggi (*daily deals*), cuplikan gerai mitra terdekat, ringkasan statistik dampak lingkungan platform, serta peran (*role*) pengguna aktif untuk konfigurasi navigasi (*Auth: Guest, Consumer, Merchant, Admin*)
+  * `GET /api/v1/landing/daily-deals/` : daftar produk surplus berstatus *Available* yang diurutkan berdasarkan persentase potongan harga terbesar (*Auth: Guest, Consumer, Merchant, Admin*)
+* **Alur Integrasi Data**: halaman Utama dan kerangka navigasi (*Bottom Navigation / Drawer*) di Flutter memanggil endpoint DRF di atas secara asinkron saat aplikasi dibuka, Django mengagregasi data dari model `MerchantProduct` dan `MerchantLocationIntegrator` lalu menyerialisasinya menjadi satu paket respons JSON, kemudian Flutter mem-parsing JSON tersebut ke dalam model `LandingData` untuk merender bagian *Daily Deals*, peta mini gerai terdekat, kartu dampak lingkungan, serta menu navigasi sesuai *role* pengguna.
 ---
 
 ## 🛠️ Pembagian Job Desk
