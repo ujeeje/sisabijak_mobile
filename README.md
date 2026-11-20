@@ -163,6 +163,7 @@ SisaBijak adalah platform e-commerce food rescue berbasis Django yang dirancang 
   * `login_user()` : Endpoint autentikasi masuk ke sistem dan inisiasi sesi cookie/token (*Auth: Guest, Consumer, Merchant, Admin*)
   * `logout_user()` : Endpoint untuk mengakhiri sesi login pengguna (*Auth: Consumer, Merchant, Admin*)
   * `profile()` / `account_profile_view()` : Endpoint informasi role dan profil akun login (*Auth: Consumer, Merchant, Admin*)
+* **Alur Integrasi Data**: Modul Authentication & Authorization menghubungkan aplikasi Flutter dengan backend Django REST Framework untuk mengelola registrasi, login, logout, dan verifikasi sesi pengguna. Aplikasi Flutter mengirimkan kredensial (username dan password) secara asinkron melalui permintaan HTTP POST ke endpoint autentikasi, Django memvalidasi akun serta menginisiasi sesi login dan mengembalikan respons JSON berisi status autentikasi beserta peran (*role*) pengguna, kemudian Flutter mengolah data JSON tersebut untuk mengelola sesi lokal dan secara otomatis mengarahkan navigasi antarmuka ke halaman beranda yang sesuai dengan peran pengguna.
 
 ---
 
