@@ -138,7 +138,10 @@ SisaBijak adalah platform e-commerce food rescue berbasis Django yang dirancang 
     * `longitude` : Koordinat bujur (longitude)
     * `latitude` : Koordinat lintang (latitude)
 * **Views / Endpoints (Backend Django REST / JSON)**:
-  * `merchant_location()` / `get_merchant_locations_json()` : Endpoint data GeoJSON / daftar koordinat seluruh merchant mitra untuk di-render pada peta interaktif (*Auth: Guest, Consumer, Merchant, Admin*)
+  * **Endpoints (Django REST Framework)**:
+  * `GET /api/v1/merchants/locations/` : daftar seluruh titik koordinat dan alamat merchant mitra untuk di-render pada peta interaktif, mendukung pencarian nama toko atau kata kunci alamat `?q=` (*Auth: Guest, Consumer, Merchant, Admin*)
+  * `GET /api/v1/merchants/locations/<id_merchant>/` : detail informasi dan koordinat presisi (`latitude`, `longitude`) satu merchant mitra saat marker peta dipilih (*Auth: Guest, Consumer, Merchant, Admin*)
+* **Alur Integrasi Data**: halaman Peta Interaktif di Flutter memanggil endpoint DRF di atas secara asinkron, Django mengambil data `MerchantLocationIntegrator` dari database lalu mengubahnya menjadi format JSON melalui serializer, kemudian Flutter mem-parsing JSON tersebut menjadi objek model `MerchantLocation` untuk ditampilkan sebagai pin lokasi dan rute penjemputan.
 
 ---
 
@@ -165,7 +168,7 @@ SisaBijak adalah platform e-commerce food rescue berbasis Django yang dirancang 
 
 ### 7. Modul Landing Page & Base Platform
 * **Penanggung Jawab**: Ghaisan Nabil Iradat
-* **Deskripsi Fitur**:  
+* **Deskripsi Fitur**:    
   Modul ini berfungsi sebagai gerbang utama platform SisaBijak. Halaman ini menyajikan penawaran makanan surplus harian (*daily deals*) dengan diskon terbesar serta cuplikan peta gerai mitra terdekat. Selain itu, modul ini menyediakan kerangka tata letak (*base layout*) dan navigasi (seperti *Bottom Navigation* / *Drawer*) sesuai dengan peran (*role*) pengguna.
 * **Models**:
   * Mengintegrasikan data dari:
