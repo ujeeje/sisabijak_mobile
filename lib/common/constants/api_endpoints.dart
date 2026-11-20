@@ -9,8 +9,12 @@ class ApiEndpoints {
   static const String logout = "$baseUrl/logout/";
   static const String accountProfile = "$baseUrl/account-profile/";
 
-  // Catalog
+  // Catalog (api django rest framework)
   static const String catalogJson = "$baseUrl/catalog/json/";
+  static const String catalogProducts = "$baseUrl/api/v1/catalog/products/";
+  static String catalogProductDetail(String productId) => "$baseUrl/api/v1/catalog/products/$productId/";
+  static String catalogReviews(String productId) => "$baseUrl/api/v1/catalog/products/$productId/reviews/";
+  static String catalogReviewDetail(int reviewId) => "$baseUrl/api/v1/catalog/reviews/$reviewId/";
 
   // Merchant
   static const String merchantProducts = "$baseUrl/merchant/products/";
