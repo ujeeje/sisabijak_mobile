@@ -1,6 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 
-// Placeholder Bottom Navigation untuk MerchantBottomNav
+// Bottom Navigation untuk Merchant
 // Items: Produk Saya, Pesanan Masuk, Profil
 class MerchantBottomNav extends StatelessWidget {
   final int currentIndex;
@@ -18,9 +18,21 @@ class MerchantBottomNav extends StatelessWidget {
       currentIndex: currentIndex,
       onTap: onTap,
       type: BottomNavigationBarType.fixed,
+      selectedItemColor: Theme.of(context).primaryColor,
+      unselectedItemColor: Colors.grey,
       items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Item 1'),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Item 2'),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.inventory_2),
+          label: 'Produk Saya',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.inbox),
+          label: 'Pesanan Masuk',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profil',
+        ),
       ],
     );
   }
