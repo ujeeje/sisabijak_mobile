@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../common/constants/api_endpoints.dart';
 import '../../../common/constants/colors.dart';
+import '../../order/screens/cart_checkout_page.dart';
 import '../models/product.dart';
 import '../models/review.dart';
 import '../widgets/product_card.dart';
@@ -96,16 +97,16 @@ class ProductDetailPage extends StatelessWidget {
                     ),
                     _info(Icons.location_on_outlined, product.address),
                     const SizedBox(height: 16),
-                    // tombol pesan, nanti disambungin ke halaman keranjang (modul order)
+                    // Teruskan produk katalog ke draft keranjang Order System.
                     SizedBox(
                       width: double.infinity,
                       child: FilledButton(
                         style: FilledButton.styleFrom(backgroundColor: AppColors.primary),
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Halaman keranjang segera hadir.")),
-                          );
-                        },
+                        onPressed: product.productStock > 0 && product.endPickup.isAfter(DateTime.now())
+                            ? () => Navigator.push(context, MaterialPageRoute(
+                                builder: (_) => CartCheckoutPage(initialProduct: product),
+                              ))
+                            : null,
                         child: const Text("Pesan Sekarang"),
                       ),
                     ),
